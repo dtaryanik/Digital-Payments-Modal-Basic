@@ -1,0 +1,181 @@
+<head>
+  <link data-require="font-awesome@*" data-semver="4.7.0" rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css" integrity="sha384-PsH8R72JQ3SOdhVi3uxftmaW6Vc51MKb0q5P2rRUpPvrszuE4W1povHYgTpBfshb" crossorigin="anonymous" />
+  <link href="https://testportalone.processonepayments.com/GenericModal/Css/testpage/testPage.css?v=Lk-8mt3tvpn8pld9KyMCdiTWoC_nIpFj8-WF4gIR6oM1" rel="stylesheet" />
+    <script src="https://testportalone.processonepayments.com/GenericModal/js/test?v=AAuvm_qhkYgbVy-rTUQgrnrmH4vJO4b6YxY8Z8jFLRA1"></script>
+  <script type="text/javascript" src="https://testportalone.processonepayments.com/GenericModal/Cdn/PortalOne.js"></script>
+  <style>
+    .bg-dark {
+    background-color: #285ba7!important;
+}
+  </style>
+
+  <style>
+    .bg-dark {
+    background-color: #285ba7!important;
+}
+  </style>
+</head>
+
+<body class="container">
+  <nav class="navbar navbar-dark bg-dark">
+    <a class="navbar-brand" href="#" data-toggle="stub">
+      <span>
+          <i class="fa fa-car" aria-hidden="true"></i>
+        </span> Demo Payment Page
+    </a>
+  </nav>
+  <div class="">
+    <div class="body mt-4">
+      <h1 class="mb-4">
+            <span>Welcome D Money</span>
+        </h1>
+    </div>
+    <div class="row mb-4">
+      <div class="col">
+        <div class="card">
+          <div class="card-header">
+            <i class="fa fa-info-circle" aria-hidden="true"></i> Billing Info
+          </div>
+          <div class="card-body">
+            <div class="row mt-2">
+              <div class="col text-center">
+                <h5>
+                    <div class="mb-3 small">
+                      <strong>Amount Due</strong>
+                    </div>
+                    <div class="display-4 text-success">$7377.98</div>
+                  </h5>
+                <div class="text-center">
+                  <button id="see-in-action" class="btn btn-lg btn-primary">Pay now</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex d-align-items-left">
+              <span>Total 6 Month Premium:</span>
+              <span class="ml-md-auto">$647.88</span>
+            </li>
+            <li class="list-group-item d-flex d-align-items-left">
+              <span>Amount of Last Payment:</span>
+              <span class="ml-md-auto">$107.98</span>
+            </li>
+            <li class="list-group-item d-flex d-align-items-left">
+              <span>Last Payment Received:</span>
+              <span class="ml-md-auto">10/6/2018</span>
+            </li>
+          </ul>
+        </div>
+      </div>
+      <div class="col">
+        <div class="row mb-4">
+          <div class="col">
+            <div class="card">
+              <div class="card-header">
+                <i class="fa fa-user" aria-hidden="true"></i> Policy Info
+              </div>
+              <ul class="list-group list-group-flush">
+                <li class="list-group-item">
+                  Policy Number: <b>4450354958</b>
+                  <br> Policy Period: 06/06/2018 to 12/06/2018
+                </li>
+                <li class="list-group-item">
+                  <h6 class="text-muted">Home Address</h6>
+                  <ul class="list-unstyled address">
+                    <li>201 W. Mifflin St</li>
+                    <li>Madison, WI 53703</li>
+                  </ul>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <div class="panel panel-info">
+      <div class="panel-heading">
+        Events
+        <i class="btn-in-header glyphicon glyphicon-trash" title="Remove Events" onclick="$('#portalOneContainerResult').empty()"></i>
+      </div>
+      <div class="panel-body">
+        <pre id="portalOneContainerResult"></pre>
+      </div>
+    </div>
+  </div>
+  
+
+  <!--div container reserved for the Modal window -->
+  <div id="portalOneContainer"></div>
+
+
+  <script type="text/javascript">
+    $(function() {
+
+      $('#see-in-action').on("click", function(e) {
+        e.preventDefault();
+        createSessionAndOpenModalWindow();
+      });
+
+      function openModalWindow(sessionId) {
+        $('#portalOneContainer').portalOne();
+
+        var portalOne = $('#portalOneContainer');
+        $('#portalOneContainerResult').eventLog(portalOne);
+
+        portalOne.data('portalOne').makePayment({
+          'paymentCategory': 'CreditCard',
+          'feeContext': 'PaymentWithoutFee',
+          'amountContext': 'SelectOrEnterAmount',
+          'minAmountDue': '107.98',
+          'accountBalance': '647.88',
+          'billingZip': '53703',
+          'billingAddressStreet': '201 W. Mifflin St',
+          'policyHolderName': 'John Smith',
+          'referenceNumber': '4450354958',
+          'confirmationDisplay': 'false',
+          'saveOption': 'UserSelect',
+          'accountGroupCode': 'PersonalAuto',
+          'sessionId': sessionId
+        });
+      };
+
+      /*
+      .../SessionKey/Create should be called from the server side.
+      In order to protect your security, do not expose your PortalOne Authentication key to anyone.
+      Ths function and authentication key are provided for demonstrational purposes only.
+      */
+      function createSessionAndOpenModalWindow() {
+
+        const authKey = window.prompt('[For testing only] Please, enter AuthKey');
+
+        $.ajax({
+          url: 'https://stgportalone.processonepayments.com/GenericModal/SessionKey/Create',
+          data: {
+            portalOneAuthenticationKey: authKey
+          },
+          dataType: 'json',
+          method: 'POST',
+          success: function(session) {
+            if (session.IsSuccessful) {
+              openModalWindow(session.SessionKey);
+            } else {
+              element.trigger('portalOne.error', {
+                description: "The payment portal loading failed: Can't create session key"
+              });
+            }
+          },
+          fail: function(e) {
+            element.trigger('portalOne.error', {
+              description: 'The payment portal loading failed ' + e.statusText
+            });
+          }
+        });
+      }
+    });
+  </script>
+
+</body>
